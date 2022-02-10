@@ -4,7 +4,7 @@ defmodule Citizenlab.Repo.Migrations.CreateFolders do
   def change do
     create table(:folders) do
       add :title, :string
-      add :description, :string
+      add :description, :text
       add :started, :date
       add :parent_id, references("folders")
     end
