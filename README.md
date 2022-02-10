@@ -15,7 +15,7 @@ There's some sample data in `sample_data.json`, which you can use to seed your d
 ### The API
 
 - [x] Implement a data model that can be persisted in a database
-- [x] Load in the sample data
+- [] Load in the sample data
 
 Implement the following API endpoints that return json.
 
