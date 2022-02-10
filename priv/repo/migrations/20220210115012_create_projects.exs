@@ -6,8 +6,6 @@ defmodule Citizenlab.Repo.Migrations.CreateProjects do
       add :title, :string
       add :description, :text
       add :started, :date
-
-      timestamps()
     end
   end
 end

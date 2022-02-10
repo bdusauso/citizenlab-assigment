@@ -7,8 +7,6 @@ defmodule Citizenlab.Repo.Migrations.CreateFolders do
       add :description, :string
       add :started, :date
       add :parent_id, references("folders")
-
-      timestamps()
     end
 
     alter table(:projects) do

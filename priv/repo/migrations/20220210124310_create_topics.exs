@@ -4,8 +4,6 @@ defmodule Citizenlab.Repo.Migrations.CreateTopics do
   def change do
     create table(:topics) do
       add :title, :string
-
-      timestamps()
     end
 
     create table(:projects_topics) do

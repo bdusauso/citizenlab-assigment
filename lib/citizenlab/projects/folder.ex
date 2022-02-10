@@ -9,8 +9,6 @@ defmodule Citizenlab.Projects.Folder do
     field :title, :string
 
     belongs_to :parent, Folder, foreign_key: :parent_id
-
-    timestamps()
   end
 
   @doc false

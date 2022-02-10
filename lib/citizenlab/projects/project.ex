@@ -10,8 +10,6 @@ defmodule Citizenlab.Projects.Project do
 
     many_to_many :topics, Topic, join_through: "projects_topics"
     belongs_to :folder, Folder
-
-    timestamps()
   end
 
   @doc false
