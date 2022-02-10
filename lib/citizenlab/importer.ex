@@ -4,8 +4,6 @@ defmodule Citizenlab.Importer do
   """
 
   alias Citizenlab.Projects.{Folder, Project, Topic}
-
-  import Ecto.Changeset
   alias Citizenlab.Repo
 
 
@@ -13,57 +11,51 @@ defmodule Citizenlab.Importer do
     json =
       "sample_data.json"
       |> File.read!()
-      |> Jason.decode!()
+      |> Jason.decode!(keys: :atoms)
 
     import_topics(json)
     import_folders(json)
     import_projects(json)
-    end
-
-  # defp init(), do: Mix.Ecto.ensure_started(Citizenlab.Repo, [])
-
-  # defp import_
-  defp import_projects(json) do
-    json
-    |> Map.fetch!("projects")
-    |> Enum.map(&import_project/1)
   end
 
-  defp import_project(project_attrs) do
-    project_title = project_attrs["title"]
-    Mix.shell().info("Importing project #{project_title}")
+  def import_projects(json) do
+    projects =
+      json[:projects]
+      |> Enum.map(&field_to_date(&1, :started))
+      |> Enum.map(&rename_attribute(&1, :folder, :folder_id))
+      |> Enum.map(&Map.delete(&1, :topics))
 
-    project_attrs
-    |> import_project_changeset()
-    |> Repo.insert!()
-  end
+    projects_topics = Enum.flat_map(json[:projects], fn project ->
+      for topic <- project[:topics], do: %{project_id: project.id, topic_id: topic}
+    end)
 
-  defp import_project_changeset(attrs) do
-    %Project{}
-    |> cast(attrs, [:id, :title, :description, :started])
-    |> validate_required([:id, :title, :description, :started])
+    IO.inspect(projects_topics)
+
+    Repo.insert_all(Project, projects)
+    Repo.insert_all("projects_topics", projects_topics)
   end
 
   defp import_topics(json) do
-    json
-    |> Map.fetch!("topics")
-    |> Enum.map(&import_topic/1)
-  end
-
-  defp import_topic(topic_attrs) do
-    topic_title = topic_attrs["title"]
-    Mix.shell().info("Importing topic #{topic_title}")
+    Repo.insert_all(Topic, json[:topics])
   end
 
   def import_folders(json) do
-    json
-    |> Map.fetch!("folders")
-    |> Enum.sort_by(&(&1.id))
-    |> Enum.map(&import_folder/1)
+    folders =
+      json[:folders]
+      |> Enum.sort_by(&(&1.id))
+      |> Enum.map(&field_to_date(&1, :started))
+      |> Enum.map(&rename_attribute(&1, :folder, :parent_id))
+
+    Repo.insert_all(Folder, folders)
   end
 
-  defp import_folder(folder_attrs) do
-    folder_title = folder_attrs["title"]
-    Mix.shell().info("Importing folder #{folder_title}")
+  defp field_to_date(map, field) do
+    Map.update!(map, field, &(Date.from_iso8601!(&1)))
+  end
+
+  defp rename_attribute(attrs, from, to) do
+    attrs
+    |> Map.put(to, attrs[from])
+    |> Map.delete(from)
   end
 end
