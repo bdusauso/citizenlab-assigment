@@ -5,7 +5,9 @@ defmodule CitizenlabWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/api", CitizenlabWeb do
+  scope "/", CitizenlabWeb do
     pipe_through :api
+
+    get "/items", ItemController, :index
   end
 end
