@@ -16,8 +16,11 @@ defmodule CitizenlabWeb.ProjectView do
       title: project.title,
       description: project.description,
       started: project.started,
-      folder: project.folder.id,
+      folder: show_folder(project),
       topics: render_many(project.topics, TopicView, "topic.json")
     }
   end
+
+  defp show_folder(%{folder: nil}), do: []
+  defp show_folder(%{folder: folder}), do: folder.id
 end
