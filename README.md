@@ -14,16 +14,16 @@ There's some sample data in `sample_data.json`, which you can use to seed your d
 
 ### The API
 
-- [ ] Implement a data model that can be persisted in a database
-- [ ] Load in the sample data
+- [x] Implement a data model that can be persisted in a database
+- [x] Load in the sample data
 
 Implement the following API endpoints that return json.
 
 `GET /items?parent=folder_id`
-- [ ] Returns a single array with a mix of projects and folders
-- [ ] When the `parent` parameter is passed, only the direct children of the given folder are returned
-- [ ] If no parent is given, the root items are returned
-- [ ] All returned items are sorted from newest to oldest
+- [x] Returns a single array with a mix of projects and folders
+- [x] When the `parent` parameter is passed, only the direct children of the given folder are returned
+- [x] If no parent is given, the root items are returned
+- [x] All returned items are sorted from newest to oldest
 
 `GET /tree?search=sometext`
 - [ ] Returns a tree structure with all the folders and projects
@@ -36,7 +36,7 @@ Issues and blockers can't always be predicted and writing software under time pr
 
 We prefer that you focus on covering the base requirements. Quality over quantity. In case you'd have time left, here are some bonus things you could amaze us with.
 
-- [ ] Make your solution work in Docker
+- [+/-] Make your solution work in Docker
 - [ ] Surprise us :)
 
 ## Rules
