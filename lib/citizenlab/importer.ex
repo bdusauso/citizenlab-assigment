@@ -1,11 +1,6 @@
 defmodule Citizenlab.Importer do
-  @moduledoc """
-    This is not complete at all ...
-  """
-
   alias Citizenlab.Projects.{Folder, Project, Topic}
   alias Citizenlab.Repo
-
 
   def import do
     json =
@@ -28,8 +23,6 @@ defmodule Citizenlab.Importer do
     projects_topics = Enum.flat_map(json[:projects], fn project ->
       for topic <- project[:topics], do: %{project_id: project.id, topic_id: topic}
     end)
-
-    IO.inspect(projects_topics)
 
     Repo.insert_all(Project, projects)
     Repo.insert_all("projects_topics", projects_topics)
